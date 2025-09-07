@@ -1,33 +1,33 @@
 # n8n Workflows Directory
 
-This directory contains all the n8n automation workflows organized by category.
+This directory contains all the n8n automation workflows organized by category with individual documentation.
 
 ## 📁 Directory Structure
 
 ### Business Automation
-- **Plumbing Voice Agent.json** - AI-powered voice-to-invoice automation
-- **AI Customer Support Agent.json** - Intelligent email support with smart routing
+- [Plumbing Voice Agent](business-automation/plumbing-voice-agent/README.md) - AI-powered voice-to-invoice automation
+- [AI Customer Support Agent](business-automation/ai-customer-support/README.md) - Intelligent email support with smart routing
 
 ### Travel Automation
-- **AI Travel Concierge.json** - Automated travel planning and booking
-- **Travel Concierge Automation Workflow.json** - Main travel automation workflow
-- **Travel Concierge Data Ingestion.json** - Travel data processing pipeline
-- **Travel Concierge Enrichment Flow Steps.json** - Data enrichment and optimization
+- [AI Travel Concierge](travel-automation/ai-travel-concierge/README.md) - Automated travel planning and booking
+- [Travel Automation Workflow](travel-automation/travel-automation-workflow/README.md) - Main travel automation workflow
+- [Travel Data Ingestion](travel-automation/travel-data-ingestion/README.md) - Travel data processing pipeline
+- [Travel Enrichment](travel-automation/travel-enrichment/README.md) - Data enrichment and optimization
 
 ### Content Automation
-- **AI Diagram Generator.json** - Automated diagram creation from text
+- [AI Diagram Generator](content-automation/ai-diagram-generator/README.md) - Automated diagram creation from text
 
 ### Support Automation
-- **AI Helpdesk.json** - Customer support automation
-- **AI Support.json** - General support workflow
+- [AI Helpdesk](support-automation/ai-helpdesk/README.md) - Customer support automation
+- [AI Support](support-automation/ai-support/README.md) - General support workflow
 
 ## 🚀 Quick Import
 
-1. Copy the JSON file content
-2. In n8n, go to "Import from File"
-3. Paste the JSON content
-4. Configure credentials
-5. Activate the workflow
+1. Navigate to the desired workflow directory
+2. Copy the JSON file content
+3. In n8n, go to "Import from File"
+4. Paste the JSON content
+5. Follow the setup guide in the README
 
 ## 📋 Workflow Requirements
 
