@@ -1,0 +1,122 @@
+{
+  "name": "Travel Concierge Enrichment Flow Steps",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "01a8dc16-f526-47a2-8b1b-3816c934e69b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f7ab1c5b-f77d-4bdc-9e15-9ab1527ab9df",
+      "name": "Webhook",
+      "webhookId": "01a8dc16-f526-47a2-8b1b-3816c934e69b"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app6SwZ1NIaxTfq7R",
+          "mode": "list",
+          "cachedResultName": "Travel Concierge",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R"
+        },
+        "table": {
+          "__rl": true,
+          "value": "app6SwZ1NIaxTfq7R",
+          "mode": "id"
+        },
+        "filterByFormula": "=ISBLANK({LLM_Summary})",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "ca732078-3576-49cc-9360-5b2ce4ddbee3",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "k5kWkPDWowbXGdd4",
+          "name": "Airtable Personal Access Token account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "[\n  {\n    \"role\": \"system\",\n    \"content\": \"You are a helpful assistant.\"\n  },\n  {\n    \"role\": \"user\",\n    \"content\": \"Provide additional notes and tips for the following activity, focusing on what makes it special for travelers who love hiking: Scenic hike with panoramic views and diverse wildlife.\"\n  }\n]\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        416,
+        0
+      ],
+      "id": "47924bad-a858-4bc6-b2b9-ecf10bf9c463",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4da85106-af90-4147-a553-7ea84c564749",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f15640fa6516cf7b2e4bf4f85bde174f1f4b82346c32f19e18c8c7969860825f"
+  },
+  "id": "xZDLLM81rc0Kwtu4",
+  "tags": []
+}

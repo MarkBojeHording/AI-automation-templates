@@ -1,0 +1,161 @@
+{
+  "name": "AI Diagram Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fde72aee-dea3-4373-872b-3f69fd06299f",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e91b4587-4ec0-48ee-b906-f72e4be96115",
+      "name": "Webhook",
+      "webhookId": "fde72aee-dea3-4373-872b-3f69fd06299f"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the input data from the previous node (Webhook)\nconst inputData = $input.item.json;\n\n// Extract the properties, providing a default value if they are undefined\nconst diagramType = inputData.diagramType || 'System Architecture';\nconst style = inputData.style || 'Flat Minimal';\nconst background = inputData.background || 'Dark';\nconst colorPalette = inputData.colorPalette || 'Corporate';\nconst customLabels = inputData.customLabels || []; // This is the key change\nconst iconStyle = inputData.iconStyle || 'Official Logos';\nconst labelStyle = inputData.labelStyle || 'Minimal Text';\n\n// Build the final prompt string\nconst prompt = `A ${style} ${diagramType} diagram, with a ${background} background, and a ${colorPalette} color palette. It should depict the following concepts: ${customLabels.join(', ')}. Use ${iconStyle} icons and a ${labelStyle} label style. The image should be professional, clean, and modern.`;\n\n// Return the new JSON object with the prompt\nreturn [{ json: { prompt: prompt } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "da571c0c-52a5-4d85-ab8c-30f5996cf502",
+      "name": "Build AI Prompt"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{$json.prompt}}",
+        "options": {
+          "size": "={{$json.outputSize}}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d431ae76-4be8-4bb0-84a5-ce870963a071",
+      "name": "Generate Image with DALL-E",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"status\": \"success\",\n  \"image_url\": \"{{ $('Upload file').item.json.webContentLink.replace('download', 'view') }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        832,
+        0
+      ],
+      "id": "4516c8dc-8eac-445d-8d1b-ce71e57c446d",
+      "name": "Return Image to UI"
+    },
+    {
+      "parameters": {
+        "name": "={{$json.diagramType}}_{{$now.valueOf()}}.png",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1DwQroONIg9zXaKaU27yAhJXlAy673ulx",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "a9bb8bda-399d-4457-b207-efd224f1c822",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OeAr4ilHfwLXjBhu",
+          "name": "Google Drive account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Build AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate Image with DALL-E",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image with DALL-E": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload file": {
+      "main": [
+        [
+          {
+            "node": "Return Image to UI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "63bd3b3b-86fb-4bbc-b5b1-ab58cd25c09e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f15640fa6516cf7b2e4bf4f85bde174f1f4b82346c32f19e18c8c7969860825f"
+  },
+  "id": "QXTfSTZOQcFOrThK",
+  "tags": []
+}

@@ -1,0 +1,170 @@
+{
+  "name": "AI Customer Support Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0650b06b-3d97-42d7-a5f0-42942e519ffd",
+      "name": "Telegram Trigger",
+      "webhookId": "37f46f4e-e936-41e2-a8c5-ead450c0ffe9",
+      "credentials": {
+        "telegramApi": {
+          "id": "bP4TqoBPm3mlHHhe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "\"You are a helpful customer support AI assistant. Provide clear, friendly responses to customer queries.\"",
+              "role": "system"
+            },
+            {
+              "content": "={{ $('Telegram Trigger').item.json.message.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5f3c90f8-9925-4146-be4a-cf324db22b73",
+      "name": "Call OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "= {{ $('Call OpenAI').item.json.message.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "84623072-0046-41bb-b4b5-449039f0079c",
+      "name": "Send a text message",
+      "webhookId": "d3807735-898b-43ac-bbb7-75b2e90803b7",
+      "credentials": {
+        "telegramApi": {
+          "id": "bP4TqoBPm3mlHHhe",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://customer-support-kb-1m6a8dr.svc.aped-4627-b74a.pinecone.io",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"queries\": [{\n    \"query\": {{ $('Telegram Trigger').item.json.message.text }},\n    \"topK\": 3,\n    \"includeMetadata\": true\n  }]\n}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        0
+      ],
+      "id": "0357d9da-5c04-47eb-aa7c-042ea3fcdad7",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "TGrZJhlYiD6rwLpX",
+          "name": "Bearer Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Call OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0b8d70cd-5be5-4279-8605-11caaa0c568b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f15640fa6516cf7b2e4bf4f85bde174f1f4b82346c32f19e18c8c7969860825f"
+  },
+  "id": "KdNpDnwS7TEctdyr",
+  "tags": []
+}

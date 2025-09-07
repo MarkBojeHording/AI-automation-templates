@@ -1,0 +1,713 @@
+{
+  "name": "AI Travel Concierge",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "travel-concierge",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "d68bdbd3-13fb-4ffd-847c-17847bd4defe",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        -32
+      ],
+      "webhookId": "travel-concierge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const userQuery = $json.userQuery || '';\nconst userId = $json.userId || '';\nconst chatHistory = $json.chatHistory || [];\n\n// Create classification prompt\nconst classificationPrompt = `Classify the following travel query into one of these categories:\n- \"Activity Inspiration\" - if asking about things to do, activities, or experiences\n- \"Destination Discovery\" - if asking about places to go, locations, or destinations\n\nRespond with ONLY the category name.\n\nQuery: \"${userQuery}\"\n\nCategory:`;\n\n// Create keyword extraction prompt\nconst keywordPrompt = `Extract 2-4 key keywords from the following user query. Keywords should be related to travel, destinations, or activities. Examples: 'hiking', 'beach', 'Europe', 'winter', 'adventure', 'family'.\n\nRespond with ONLY a comma-separated list of keywords, or 'none' if no relevant keywords are present.\n\nUser Query: \"${userQuery}\"\n\nKeywords:`;\n\nreturn {\n  userQuery,\n  userId,\n  chatHistory,\n  classificationPrompt,\n  keywordPrompt\n};"
+      },
+      "id": "fae2ac9e-28ad-44ae-891d-86d75b24fd26",
+      "name": "Prepare Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get inputs\nconst item1 = $input.first().json;\nconst item2 = $input.last().json;\n\n// Extract classification - handle the OpenAI response format\nlet classification = '';\nif (item1.message && item1.message.content) {\n  classification = item1.message.content.trim();\n}\n\n// Extract keywords from second input\nlet keywords = '';\nif (item2.message && item2.message.content) {\n  keywords = item2.message.content.trim();\n}\n\n// Get original data\nconst originalData = $('Prepare Data').first().json;\n\n// Create safe filter formula - avoid complex formulas that can break\nlet filterFormula = 'TRUE()';\n\n// Only create filter if we have valid keywords\nif (keywords && \n    keywords !== '[object Object]' && \n    keywords.toLowerCase() !== 'none' && \n    keywords.length > 3) {\n  \n  // Use simple single keyword to avoid syntax errors\n  const firstKeyword = keywords.split(',')[0].trim();\n  if (firstKeyword.length > 2) {\n    // Simple, safe formula\n    filterFormula = `FIND(\"${firstKeyword}\", {Name})`;\n  }\n}\n\nreturn {\n  classification: classification,\n  filterFormula: filterFormula,\n  userQuery: originalData.userQuery,\n  userId: originalData.userId,\n  chatHistory: originalData.chatHistory || [],\n  keywords: keywords\n};"
+      },
+      "id": "32ae3001-92bf-435f-b761-80ff9f6f705e",
+      "name": "Process Classification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -144
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app6SwZ1NIaxTfq7R",
+          "mode": "list",
+          "cachedResultName": "Travel Concierge",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblfzsgCAw8jzgNk3",
+          "mode": "list",
+          "cachedResultName": "Destinations",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R/tblfzsgCAw8jzgNk3"
+        },
+        "filterByFormula": "={{ $json.filterFormula ? $json.filterFormula : 'TRUE()' }}",
+        "options": {}
+      },
+      "id": "c5e6209c-5998-40f6-800c-42fd50fbccdb",
+      "name": "Get Destinations",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [
+        416,
+        -272
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZoqviwxD7IAYAzSi",
+          "name": "Airtable Personal Access Token account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app6SwZ1NIaxTfq7R",
+          "mode": "list",
+          "cachedResultName": "Travel Concierge",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl21ZPERkvadInrd",
+          "mode": "list",
+          "cachedResultName": "Activities",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R/tbl21ZPERkvadInrd"
+        },
+        "filterByFormula": "= ={{ $json.filterFormula ? $json.filterFormula : 'TRUE()' }}",
+        "options": {}
+      },
+      "id": "20b5fb67-699d-49d1-90b9-1c831cb30cf7",
+      "name": "Get Activities",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2,
+      "position": [
+        416,
+        32
+      ],
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZoqviwxD7IAYAzSi",
+          "name": "Airtable Personal Access Token account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "prompt": "You are a helpful travel concierge. The user asked: \"{{ $json.userQuery }}\"\n\nI couldn't find specific matches in our database, but I'd still love to help you plan an amazing outdoor adventure! Please provide a friendly response acknowledging this and offer to connect them with one of our travel experts who can provide personalized recommendations.\n\nEnd by encouraging them to book a call with an expert.",
+        "options": {
+          "maxTokens": 200,
+          "temperature": 0.7
+        },
+        "requestOptions": {}
+      },
+      "id": "45c4e54d-6944-436a-aafe-e97569714408",
+      "name": "Generate Fallback Response",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        320
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "chatgpt-4o-latest",
+          "mode": "list",
+          "cachedResultName": "CHATGPT-4O-LATEST"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.keywordPrompt }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 50,
+          "temperature": 0.1
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -352,
+        336
+      ],
+      "id": "7ef6c9fd-7c6a-4825-af90-a8545fed700a",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $json.classificationPrompt }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -464,
+        -208
+      ],
+      "id": "4986b5f4-4597-41cd-a341-2c47f1b163d0",
+      "name": "Message a model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "expression",
+        "numberOutputs": 2,
+        "output": "={{ $json.classification === \"Activity Inspiration\" ? 0 : $json.classification === \"Destination Discovery\" ? 1 : 0 }}"
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        128,
+        -176
+      ],
+      "id": "e5554da0-726b-40d5-b049-aaaad231be44",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert travel concierge. The user asked: \"{{ $json.userQuery }}\" and we found these activities: {{ $json.data }}. Provide helpful activity recommendations based on these results. If no specific results were found, suggest contacting our travel experts for personalized recommendations."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        752,
+        -16
+      ],
+      "id": "d800eeb5-dd4e-4c6d-94ec-9e3b7fa54fea",
+      "name": "Generate Activity Response",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert travel concierge. The user asked: \"{{ $json.userQuery }}\" and we found these destinations: {{ $json.data }}. Provide helpful destination recommendations based on these results. If no specific results were found, suggest contacting our travel experts for personalized recommendations."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        752,
+        -288
+      ],
+      "id": "49fe1823-2942-47f8-ab34-0ba7ee641cb2",
+      "name": "Generate Destination Response",
+      "credentials": {
+        "openAiApi": {
+          "id": "bKbiLydtF6B66164",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app6SwZ1NIaxTfq7R",
+          "mode": "list",
+          "cachedResultName": "Travel Concierge",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblodJiXdZDXtdVCN",
+          "mode": "list",
+          "cachedResultName": "User_Chats",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R/tblodJiXdZDXtdVCN"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Expert_Booked": false,
+            "User_Message": "={{ $json.userQuery }}",
+            "Bot_Response": "={{ $json.response }}",
+            "Recommendations": "={{ $json.classification }}",
+            "Destination": "= {{ $json.userId }}",
+            "Activity": "={{ $json.keywords }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "User_Message",
+              "displayName": "User_Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Bot_Response",
+              "displayName": "Bot_Response",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommendations",
+              "displayName": "Recommendations",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Destination",
+              "displayName": "Destination",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Activity",
+              "displayName": "Activity",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Expert_Booked",
+              "displayName": "Expert_Booked",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1248,
+        -96
+      ],
+      "id": "cd51c86e-cd72-4098-a471-e74880068f47",
+      "name": "Log Destination Conversation",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZoqviwxD7IAYAzSi",
+          "name": "Airtable Personal Access Token account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app6SwZ1NIaxTfq7R",
+          "mode": "list",
+          "cachedResultName": "Travel Concierge",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblodJiXdZDXtdVCN",
+          "mode": "list",
+          "cachedResultName": "User_Chats",
+          "cachedResultUrl": "https://airtable.com/app6SwZ1NIaxTfq7R/tblodJiXdZDXtdVCN"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Expert_Booked": false,
+            "User_Message": "={{ $json.userQuery }}",
+            "Bot_Response": "={{ $json.response }}",
+            "Recommendations": "={{ $json.classification }}",
+            "Destination": "={{ $json.userId }}",
+            "Activity": "={{ $json.keywords }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "User_Message",
+              "displayName": "User_Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Bot_Response",
+              "displayName": "Bot_Response",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Recommendations",
+              "displayName": "Recommendations",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Destination",
+              "displayName": "Destination",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Activity",
+              "displayName": "Activity",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Expert_Booked",
+              "displayName": "Expert_Booked",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1216,
+        -352
+      ],
+      "id": "2409e797-6941-4b5e-a6f9-31df85b248be",
+      "name": "Log Activity Conversation",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "ZoqviwxD7IAYAzSi",
+          "name": "Airtable Personal Access Token account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1680,
+        -240
+      ],
+      "id": "bc0d3aca-ff8e-4803-a4ef-731de17344af",
+      "name": "Respond to Webhook2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Data": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Classification": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Destinations": {
+      "main": [
+        [
+          {
+            "node": "Generate Destination Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Activities": {
+      "main": [
+        [
+          {
+            "node": "Generate Activity Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Fallback Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Process Classification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Get Destinations",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Activities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Destination Response": {
+      "main": [
+        [
+          {
+            "node": "Log Activity Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Activity Response": {
+      "main": [
+        [
+          {
+            "node": "Log Destination Conversation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Activity Conversation": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Destination Conversation": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a68aef22-6b67-4a8d-92a1-45fa60e33e11",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f15640fa6516cf7b2e4bf4f85bde174f1f4b82346c32f19e18c8c7969860825f"
+  },
+  "id": "38rmFengawdAf63p",
+  "tags": []
+}

@@ -1,0 +1,355 @@
+{
+  "name": "AI Support",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "name": "Gmail Trigger - New Support Emails",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [
+        -992,
+        144
+      ],
+      "id": "593d86f1-296e-43e9-96fe-40a18764796d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ciq54NiU2xkoVaNr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// 1. Get email data\nconst emailSubject = $json.subject || $json.payload?.headers?.find(h => h.name === 'Subject')?.value || 'No subject';\nlet emailBody = 'No body';\nif ($json.payload?.parts) {\n  const textPart = $json.payload.parts.find(p => p.mimeType === 'text/plain');\n  if (textPart?.body?.data) {\n    emailBody = Buffer.from(textPart.body.data, 'base64').toString('utf-8');\n  }\n} else if ($json.snippet) {\n  emailBody = $json.snippet.replace(/{{[^}]+}}/g, '').trim();\n}\n\n// 2. OpenAI prompt\nconst prompt = `Categorize the following email and provide a brief summary.\\nCategories:\\n- escalation_needed\\n- automated_reply\\n\\nEmail Subject: ${emailSubject}\\nEmail Body: ${emailBody}`;\n\n// 3. Call OpenAI\nconst response = await this.helpers.httpRequest({\n  url: 'https://api.openai.com/v1/chat/completions',\n  method: 'POST',\n  headers: { 'Authorization': `Bearer ${$vars[\"OPENAI_API_KEY\"]}`, 'Content-Type': 'application/json' },\n  body: { model: 'gpt-4o', messages: [{ role: 'user', content: prompt }] }\n});\n\nconst aiResponse = response.choices[0].message.content;\n\n// 4. Return fields matching Airtable\nreturn [{ json: {\n  customerEmail: $json.from || 'unknown@example.com',\n  body: emailBody,\n  text: aiResponse,\n  status: aiResponse.includes('escalation_needed') ? 'Escalated' : 'Automated Reply',\n  escalateReason: aiResponse.includes('escalation_needed') ? 'Complex case' : ''\n} }];"
+      },
+      "name": "Parse & Analyze Email",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        144
+      ],
+      "id": "cc6ca5d1-ddac-4a8e-b6e0-db550a557acf"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.status}}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              },
+              "rightValue": "Escalated",
+              "id": "44fe0704-a970-4978-bfee-1bc96c1bb6ba"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Escalation Decision",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        144
+      ],
+      "id": "9092e369-9eb8-4876-9702-e405acb621cc"
+    },
+    {
+      "parameters": {
+        "subject": "=ESCALATION NEEDED: Customer Support Required",
+        "message": "=A customer email requires human attention.\n\nPlease check the original email and respond accordingly.\n\nThis email was flagged by our AI system for human review.",
+        "additionalFields": {}
+      },
+      "name": "Escalate to Human",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        192,
+        304
+      ],
+      "id": "bd257bcd-0fc7-4cf7-aed9-eb72651077c0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ciq54NiU2xkoVaNr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "subject": "={{ $json.originalEmailSubject || 'No Subject' }} - Auto-Reply",
+        "message": "=Dear {{ $json.customerEmail.split('<')[0].trim() }}, Thank you for your email. Our AI is handling your request (Subject: {{ $json.originalEmailSubject || 'No Subject' }}). We will follow up if needed. Best, Support Team",
+        "additionalFields": {}
+      },
+      "name": "Send AI Reply",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        160,
+        -16
+      ],
+      "id": "098b591c-7072-423f-b300-cbb6a0666b1c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ciq54NiU2xkoVaNr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appeSpJ8fmINTomqo",
+          "mode": "list",
+          "cachedResultName": "Support Tickets",
+          "cachedResultUrl": "https://airtable.com/appeSpJ8fmINTomqo"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblwiYGrKz5fRQqXv",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appeSpJ8fmINTomqo/tblwiYGrKz5fRQqXv"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Customer_Email": "={{$json.customerEmail}}",
+            "Original_Message": "={{$json.body}}",
+            "AI_Response": "={{$json.text}}",
+            "Outcome": "={{$json.status}}",
+            "Escalation_Reason": "={{$json.escalateReason || ''}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Customer_Email",
+              "displayName": "Customer_Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Original_Message",
+              "displayName": "Original_Message",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "AI_Response",
+              "displayName": "AI_Response",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Outcome",
+              "displayName": "Outcome",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Escalation_Reason",
+              "displayName": "Escalation_Reason",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Create a record",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -336,
+        144
+      ],
+      "id": "fc413784-d5c8-43b2-9b91-4d5a2e9dbb44",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "7udWuCHmwUYhyXI4",
+          "name": "Airtable Personal Access Token account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "subject": "Feedback Request - {{ $json.originalEmailSubject || 'No Subject' }}",
+        "message": "=Thank you for your email. We have processed your support request and wanted to follow up to ensure everything was resolved to your satisfaction.\n\nBest regards,\nSupport Team",
+        "additionalFields": {}
+      },
+      "name": "Send Feedback Request",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        480,
+        144
+      ],
+      "id": "c314d774-9542-4c6d-ba09-743723990296",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Ciq54NiU2xkoVaNr",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      customerEmail: $json.from || \"unknown@example.com\",\n      body: $json.text || $json.snippet || \"\",\n      originalEmailSubject: $json.subject || \"No Subject\"\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -784,
+        144
+      ],
+      "id": "be11c711-3bbc-4454-b52a-f16b925ac4ca",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Escalation Decision": {
+      "main": [
+        [
+          {
+            "node": "Send AI Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalate to Human",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send AI Reply": {
+      "main": [
+        [
+          {
+            "node": "Send Feedback Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate to Human": {
+      "main": [
+        [
+          {
+            "node": "Send Feedback Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Escalation Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Analyze Email": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger - New Support Emails": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Parse & Analyze Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "35cf7746-0c0a-41ce-bccd-e783fd486171",
+  "meta": {
+    "instanceId": "f15640fa6516cf7b2e4bf4f85bde174f1f4b82346c32f19e18c8c7969860825f"
+  },
+  "id": "pjvZm6J3mqysCg3n",
+  "tags": []
+}

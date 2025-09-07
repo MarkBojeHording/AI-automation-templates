@@ -1,0 +1,219 @@
+{
+  "name": "AI-Powered Customer Support Bot",
+  "nodes": [
+    {
+      "parameters": {
+        "events": {
+          "value": "messageReceived",
+          "values": [
+            {
+              "key": "messageReceived",
+              "value": "Message Received"
+            }
+          ]
+        },
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simplify": true
+      },
+      "name": "Gmail Trigger - New Support Emails",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "credentials": {
+        "gmail": "markhordingGmail"
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Parse and analyze email with OpenAI\n\n// 1. Get email data\nconst emailSubject = $json.subject || $json.payload?.headers?.find(h => h.name === 'Subject')?.value || 'No subject';\nlet emailBody = 'No body';\nif ($json.payload?.parts) {\n  const textPart = $json.payload.parts.find(p => p.mimeType === 'text/plain');\n  if (textPart?.body?.data) {\n    emailBody = Buffer.from(textPart.body.data, 'base64').toString('utf-8');\n  }\n} else if ($json.snippet) {\n  emailBody = $json.snippet.replace(/{{[^}]+}}/g, '').trim();\n}\n\n// 2. Define OpenAI prompt\nconst prompt = `Categorize the following email and provide a brief summary.\nCategories:\n- escalation_needed\n- automated_reply\n\nEmail Subject: ${emailSubject}\nEmail Body: ${emailBody}`;\n\n// 3. Make OpenAI API call\nconst response = await this.helpers.httpRequest({\n  url: 'https://api.openai.com/v1/chat/completions',\n  method: 'POST',\n  headers: {\n    'Authorization': `Bearer ${$vars[\"OPENAI_API_KEY\"]}`,\n    'Content-Type': 'application/json'\n  },\n  body: {\n    model: 'gpt-4o',\n    messages: [{ role: 'user', content: prompt }]\n  }\n});\n\n// 4. Extract and return analysis\nconst aiResponse = response.choices[0].message.content;\nreturn [{\n  json: {\n    originalEmailSubject: emailSubject,\n    originalEmailBody: emailBody,\n    aiAnalysis: aiResponse\n  }\n}];"
+      },
+      "name": "Parse & Analyze Email",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.aiAnalysis }}",
+              "operation": "contains",
+              "value2": "escalation_needed"
+            }
+          ]
+        }
+      },
+      "name": "Escalation Decision",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "markhording@gmail.com",
+        "subject": "={{ $json.originalEmailSubject }} - Escalation Required",
+        "text": "Dear {{ $json.from.split('<')[0].trim() }},\n\nYour ticket (Subject: {{ $json.originalEmailSubject }}) has been escalated to a human agent. We will contact you soon.\n\nBest,\nSupport Team",
+        "options": {}
+      },
+      "name": "Escalate to Human",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [850, 450],
+      "credentials": {
+        "gmail": "markhordingGmail"
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "markhording@gmail.com",
+        "subject": "={{ $json.originalEmailSubject }} - Auto-Reply",
+        "text": "Dear {{ $json.from.split('<')[0].trim() }},\n\nThank you for your email. Our AI is handling your request (Subject: {{ $json.originalEmailSubject }}). We will follow up if needed.\n\nBest,\nSupport Team",
+        "options": {}
+      },
+      "name": "Send AI Reply",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [850, 150],
+      "credentials": {
+        "gmail": "markhordingGmail"
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "1EbOPm-O_CkmVVPrvoyWK4XECW6RtWoBwq8w_arpe4Qc",
+        "range": "A:D",
+        "options": {
+          "valueInputOption": "USER_ENTERED"
+        },
+        "columns": [
+          {
+            "header": "Subject",
+            "value": "={{ $json.originalEmailSubject }}"
+          },
+          {
+            "header": "Body",
+            "value": "={{ $json.originalEmailBody }}"
+          },
+          {
+            "header": "Analysis",
+            "value": "={{ $json.aiAnalysis }}"
+          },
+          {
+            "header": "Timestamp",
+            "value": "={{ new Date().toISOString() }}"
+          }
+        ]
+      },
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [1050, 300],
+      "credentials": {
+        "googleSheets": "yourGoogleSheetsCredentials"
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "markhording@gmail.com",
+        "subject": "Feedback Request - {{ $json.originalEmailSubject }}",
+        "text": "Dear {{ $json.from.split('<')[0].trim() }},\n\nPlease rate our support for your ticket (Subject: {{ $json.originalEmailSubject }}): [1-5]. Reply with your rating.\n\nBest,\nSupport Team",
+        "options": {}
+      },
+      "name": "Send Feedback Request",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [1250, 300],
+      "credentials": {
+        "gmail": "markhordingGmail"
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger - New Support Emails": {
+      "main": [
+        [
+          {
+            "node": "Parse & Analyze Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse & Analyze Email": {
+      "main": [
+        [
+          {
+            "node": "Escalation Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalation Decision": {
+      "main": [
+        [
+          {
+            "node": "Send AI Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escalate to Human",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Send AI Reply": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate to Human": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Send Feedback Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "version": 1
+}
