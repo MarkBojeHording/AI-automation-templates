@@ -25,19 +25,19 @@ create_workflow_readme() {
     local workflow_name=$2
     local json_file=$3
     local description=$4
-    
+
     echo -e "${YELLOW}📝 Creating README for: $workflow_name${NC}"
-    
+
     # Create directory if it doesn't exist
     local workflow_dir="$WORKFLOWS_DIR/$category/$workflow_name"
     mkdir -p "$workflow_dir/screenshots"
-    
+
     # Move JSON file to the workflow directory
     if [ -f "$WORKFLOWS_DIR/$category/$json_file" ]; then
         mv "$WORKFLOWS_DIR/$category/$json_file" "$workflow_dir/"
         echo -e "${GREEN}✅ Moved $json_file to $workflow_dir/${NC}"
     fi
-    
+
     # Create README.md
     cat > "$workflow_dir/README.md" << EOF
 # $workflow_name
@@ -150,9 +150,9 @@ EOF
 create_setup_guide() {
     local category=$1
     local workflow_name=$2
-    
+
     local workflow_dir="$WORKFLOWS_DIR/$category/$workflow_name"
-    
+
     cat > "$workflow_dir/setup.md" << EOF
 # Setup Guide: $workflow_name
 

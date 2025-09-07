@@ -71,7 +71,7 @@ Before setting up this workflow, ensure you have:
 
 #### Extract Invoice Data
 - **Purpose**: Uses GPT-4 to extract structured data
-- **Settings**: 
+- **Settings**:
   - Model: GPT-4
   - Temperature: 0.1 (for consistent results)
   - Custom prompt for plumbing data extraction
@@ -171,11 +171,11 @@ AIRTABLE_TABLE_ID=your_airtable_table_id
 
 - **Execution Time**: 10-30 seconds depending on audio length
 - **Resource Usage**: Moderate (API calls to OpenAI and Airtable)
-- **API Limits**: 
+- **API Limits**:
   - OpenAI Whisper: 25MB file size limit
   - OpenAI GPT-4: Rate limits apply
   - Airtable: 5 requests per second limit
-- **Cost Factors**: 
+- **Cost Factors**:
   - Whisper: $0.006 per minute of audio
   - GPT-4: ~$0.03 per request
   - Airtable: Free tier available
