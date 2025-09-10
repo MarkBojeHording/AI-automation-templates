@@ -1,0 +1,202 @@
+{
+  "name": "Professional Headshot Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/generate-headshot",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "71466312-cc5b-4eae-8d4d-bb7e95c0ff3d",
+      "name": "Webhook",
+      "webhookId": "7986363b-0b3c-4d8b-8af6-2d0a4a9fa1e7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5d3c35f1-5632-4fa7-a67f-11d8a2c6c5ee",
+              "name": "image_data_clean",
+              "value": "={{ $json.body.image }}",
+              "type": "string"
+            },
+            {
+              "id": "b390466f-37e7-4ebc-ab87-dcf5e662a9be",
+              "name": "style",
+              "value": "={{ $json.style || 'professional' }}",
+              "type": "string"
+            },
+            {
+              "id": "46e3e3ce-2c73-4ade-b1c5-b8cec8ad3b8f",
+              "name": "background",
+              "value": "={{ $json.background || 'office' }}",
+              "type": "string"
+            },
+            {
+              "id": "79260b78-43d8-4bab-82ae-60a3a894604a",
+              "name": "clothing",
+              "value": "={{ $json.body.clothing || 'business_casual' }}",
+              "type": "string"
+            },
+            {
+              "id": "3f13b42d-3659-4f3e-9172-3e29d282c9e5",
+              "name": "name",
+              "value": "={{ $json.body.name || 'Professional' }}",
+              "type": "string"
+            },
+            {
+              "id": "d29e9627-95e0-464a-9c30-3fde18ce1545",
+              "name": "profession",
+              "value": "={{ $json.profession || 'Professional' }}",
+              "type": "string"
+            },
+            {
+              "id": "3d9d6d87-c0d5-4d1b-a7a8-2dda6d2400b6",
+              "name": "session_id",
+              "value": "={{ Math.random().toString(36).substring(7) }}",
+              "type": "string"
+            },
+            {
+              "id": "48f51efb-591b-4300-8783-73a4882877a7",
+              "name": "timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1560491c-4d02-4b58-8b0f-3758a34015c3",
+      "name": "Validate Input"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c0df28cf-e87b-4179-a041-53e164f0bf12",
+              "name": "ai_prompt",
+              "value": "=Transform this photo into a {{ $json.style }} professional headshot with {{ $json.background }} background, {{ $json.clothing }} attire. REQUIREMENTS: Maintain natural facial features, professional portrait quality, sharp focus on face, professional lighting, high resolution, natural skin tones, looking directly at camera, confident expression, head and shoulders composition, remove distracting elements. Style: {{ $json.style }}, Background: {{ $json.background }}, Profession: {{ $json.profession }}",
+              "type": "string"
+            },
+            {
+              "id": "eecff0d2-b88d-4025-b664-49334de17849",
+              "name": "style_description",
+              "value": "={{ $json.style === 'professional' ? 'professional corporate headshot, executive style, confident expression' : $json.style === 'casual' ? 'casual professional headshot, approachable and friendly' : $json.style === 'creative' ? 'creative professional headshot, artistic lighting, modern style' : $json.style === 'corporate' ? 'formal corporate executive headshot, authoritative presence' : 'professional headshot style' }}",
+              "type": "string"
+            },
+            {
+              "id": "e9fba2d4-4643-4ad7-b823-449875b85681",
+              "name": "background_description",
+              "value": "={{ $json.background === 'office' ? 'modern office environment, professional setting, softly blurred' : $json.background === 'studio' ? 'clean studio background, neutral gray gradient' : $json.background === 'outdoor' ? 'professional outdoor setting, natural environment' : $json.background === 'white' ? 'pure white background, studio lighting' : 'professional background' }}",
+              "type": "string"
+            },
+            {
+              "id": "a7eb50f0-5a87-4aba-a091-f723e747f476",
+              "name": "processing_status",
+              "value": "prompt_ready",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "3e446bf4-2e1c-467d-9621-0722ebdb0e75",
+      "name": "Build AI Prompt"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/predictions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"version\": \"google/nano-banana\",\n  \"input\": {\n    \"prompt\": \"{{ $json.ai_prompt }}\",\n    \"image_input\": [\"data:image/jpeg;base64,{{ $json.image_data_clean }}\"],\n    \"output_format\": \"jpg\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        0
+      ],
+      "id": "62adc0fc-0e2a-44cb-8501-5ec66eb0eefa",
+      "name": "Generate with Gemini",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "icgaTekP4wQF8w8N",
+          "name": "Header Auth account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [
+          {
+            "node": "Build AI Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build AI Prompt": {
+      "main": [
+        [
+          {
+            "node": "Generate with Gemini",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bd794a1d-c6d4-4443-97e3-b82936dd5bfd",
+  "meta": {
+    "instanceId": "b02c6d6bdac1715a7427651b479af9449541e602e88ea383a2ea76ff3273088f"
+  },
+  "id": "JKZhcmxcXLgn7zWG",
+  "tags": []
+}

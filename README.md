@@ -1,70 +1,76 @@
-# n8n Automation Templates Portfolio
+<!-- Banner Image Placeholder -->
+<div align="center">
+  <img src="https://via.placeholder.com/1200x400/1a1a1a/ffffff?text=n8n+AI+Automation+Templates" alt="n8n AI Automation Templates Banner" width="100%">
+</div>
 
-A comprehensive collection of AI-powered automation workflows built with n8n, showcasing various business use cases and AI integrations.
+<!-- GitHub Badges -->
+<div align="center">
+  <a href="https://github.com/MarkBojeHording/n8n-automation-templates/stargazers">
+    <img src="https://img.shields.io/github/stars/MarkBojeHording/n8n-automation-templates?style=for-the-badge&logo=github&color=yellow" alt="GitHub stars">
+  </a>
+  <a href="https://github.com/MarkBojeHording/n8n-automation-templates/network/members">
+    <img src="https://img.shields.io/github/forks/MarkBojeHording/n8n-automation-templates?style=for-the-badge&logo=github&color=blue" alt="GitHub forks">
+  </a>
+  <a href="https://github.com/MarkBojeHording/n8n-automation-templates/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/MarkBojeHording/n8n-automation-templates?style=for-the-badge&logo=github&color=green" alt="License">
+  </a>
+  <a href="https://github.com/MarkBojeHording/n8n-automation-templates/pulls">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge&logo=github" alt="PRs Welcome">
+  </a>
+</div>
 
-## 🚀 Featured Workflows
+<!-- Tagline -->
+<div align="center">
+  <h3>⚡ Prebuilt AI automation workflows for business, travel, and content – powered by n8n + OpenAI</h3>
+</div>
 
-### 1. **Plumbing Voice Agent**
-*AI-powered voice-to-invoice automation for plumbing businesses*
+## 📑 Table of Contents
 
-**Features:**
-- Voice recording to text transcription using OpenAI Whisper
-- Intelligent data extraction with GPT-4
-- Automatic GST calculations for Australian businesses
-- Airtable integration for data storage
+<details>
+<summary>Click to expand</summary>
 
-**AI Tools Used:**
-- OpenAI Whisper (Speech-to-Text)
-- OpenAI GPT-4 (Data Extraction)
-- AI-Powered Calculations (GST, labor costs)
+- [🚀 Featured Workflows](#-featured-workflows)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [📁 Repository Structure](#-repository-structure)
+- [🚀 Getting Started](#-getting-started)
+- [🔧 Prerequisites](#-prerequisites)
+- [📊 Use Cases](#-use-cases)
+- [🤝 Contributing](#-contributing)
+- [📝 License](#-license)
+- [🔗 Links](#-links)
+- [🤝 Work With Me](#-work-with-me)
+- [📧 Contact](#-contact)
 
----
-
-### 2. **AI Customer Support Agent**
-*Intelligent email support automation with smart routing*
-
-**Features:**
-- Gmail integration for email monitoring
-- AI-powered email categorization
-- Automatic escalation to human agents
-- Google Sheets logging and audit trails
-- Customer feedback collection
-
-**AI Tools Used:**
-- OpenAI GPT-4o (Email Analysis)
-- AI-Powered Decision Making
-- Gmail Integration
-- Google Sheets Integration
-
----
-
-### 3. **AI Travel Concierge**
-*Automated travel planning and booking assistance*
-
-**Features:**
-- Travel data ingestion and processing
-- AI-powered travel recommendations
-- Automated booking workflows
-- Travel enrichment and optimization
-
-**AI Tools Used:**
-- AI Travel Planning
-- Data Enrichment Algorithms
-- Automated Booking Systems
+</details>
 
 ---
 
-### 4. **AI Diagram Generator**
-*Automated diagram creation from text descriptions*
+# AI Automation Templates Portfolio
 
-**Features:**
-- Text-to-diagram conversion
-- Multiple diagram types support
-- Automated formatting and styling
+A comprehensive collection of AI-powered automation workflows across multiple platforms (n8n, Zapier, Make.com, Power Automate), showcasing various business use cases and AI integrations.
 
-**AI Tools Used:**
-- AI Diagram Generation
-- Natural Language Processing
+## 🛠️ Supported Automation Tools
+
+| Tool | Best For | Difficulty | Setup Time | Workflows | Documentation |
+|------|----------|------------|------------|-----------|---------------|
+| **n8n** | Self-hosted, complex workflows | ⭐⭐⭐ Advanced | ~30 min | 9 workflows | [📖 n8n Docs](n8n/README.md) |
+| **Zapier** | Quick integrations, no-code | ⭐ Easy | ~10 min | Coming soon | [📖 Zapier Docs](zapier/README.md) |
+| **Make.com** | Visual workflows, data processing | ⭐⭐ Intermediate | ~20 min | Coming soon | [📖 Make Docs](make-com/README.md) |
+| **Power Automate** | Microsoft ecosystem | ⭐⭐ Intermediate | ~15 min | Coming soon | [📖 Power Automate Docs](power-automate/README.md) |
+
+## 🚀 Featured Workflows (n8n)
+
+| Workflow Name | Category | Short Description | 📸 Example Output | Difficulty | Setup Time | Documentation |
+|---------------|----------|-------------------|-------------------|------------|------------|---------------|
+| **Plumbing Voice Agent** | 💼 Business | AI-powered voice-to-invoice automation for plumbing businesses | ![Example Output](./documentation/examples/plumbing-voice-agent.png) | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/business-automation/plumbing-voice-agent/README.md) |
+| **AI Customer Support Agent** | 💼 Business | Intelligent email support automation with smart routing | ![Example Output](./documentation/examples/ai-customer-support.png) | ⭐⭐⭐ Advanced | ~25 min | [📖 Read Docs](n8n/business-automation/ai-customer-support/README.md) |
+| **AI Travel Concierge** | ✈️ Travel | Automated travel planning and booking assistance | ![Example Output](./documentation/examples/ai-travel-concierge.png) | ⭐⭐⭐ Advanced | ~30 min | [📖 Read Docs](n8n/travel-automation/ai-travel-concierge/README.md) |
+| **Travel Automation Workflow** | ✈️ Travel | Main travel automation workflow for comprehensive travel management | ![Example Output](./documentation/examples/travel-automation-workflow.png) | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](n8n/travel-automation/travel-automation-workflow/README.md) |
+| **Travel Data Ingestion** | ✈️ Travel | Travel data processing pipeline for information collection | ![Example Output](./documentation/examples/travel-data-ingestion.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-data-ingestion/README.md) |
+| **Travel Enrichment** | ✈️ Travel | Data enrichment and optimization for travel information | ![Example Output](./documentation/examples/travel-enrichment.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-enrichment/README.md) |
+| **AI Diagram Generator** | 📝 Content | Automated diagram creation from text descriptions | ![Example Output](./documentation/examples/ai-diagram-generator.png) | ⭐ Easy | ~10 min | [📖 Read Docs](n8n/content-automation/ai-diagram-generator/README.md) |
+| **AI Helpdesk** | 🎧 Support | AI-powered customer support automation system | ![Example Output](./documentation/examples/ai-helpdesk.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/support-automation/ai-helpdesk/README.md) |
+| **AI Support** | 🎧 Support | General AI support workflow for various use cases | ![Example Output](./documentation/examples/ai-support.png) | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/support-automation/ai-support/README.md) |
 
 ---
 
@@ -80,51 +86,94 @@ A comprehensive collection of AI-powered automation workflows built with n8n, sh
 ## 📁 Repository Structure
 
 ```
-n8n-automation-templates/
+AI-automation-templates/
 ├── README.md
-├── workflows/
+├── n8n/
 │   ├── business-automation/
-│   │   ├── Plumbing Voice Agent.json
-│   │   └── AI Customer Support Agent.json
 │   ├── travel-automation/
-│   │   ├── AI Travel Concierge.json
-│   │   ├── Travel Concierge Automation Workflow.json
-│   │   ├── Travel Concierge Data Ingestion.json
-│   │   └── Travel Concierge Enrichment Flow Steps.json
 │   ├── content-automation/
-│   │   └── AI Diagram Generator.json
-│   └── support-automation/
-│       ├── AI Helpdesk.json
-│       └── AI Support.json
-└── documentation/
-    └── setup-guides/
+│   ├── support-automation/
+│   ├── image-automation/
+│   └── README.md
+├── zapier/
+│   ├── business-automation/
+│   ├── travel-automation/
+│   ├── content-automation/
+│   ├── support-automation/
+│   └── README.md
+├── make-com/
+│   ├── business-automation/
+│   ├── travel-automation/
+│   ├── content-automation/
+│   ├── support-automation/
+│   └── README.md
+├── power-automate/
+│   ├── business-automation/
+│   ├── travel-automation/
+│   ├── content-automation/
+│   ├── support-automation/
+│   └── README.md
+├── apps/
+│   └── headshot-generator/
+│       ├── src/
+│       ├── package.json
+│       └── README.md
+├── documentation/
+│   ├── templates/
+│   ├── setup-guides/
+│   └── examples/
+└── scripts/
+    └── create-workflow-readmes.sh
 ```
+
+> **Note**: Each automation tool has its own directory with category-based organization. Tool-specific READMEs provide navigation and setup instructions.
 
 ## 🚀 Getting Started
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/MarkBojeHording/n8n-automation-templates.git
-   ```
+✅ **Step 1: Clone the repository**
+```bash
+git clone https://github.com/MarkBojeHording/AI-automation-templates.git
+cd AI-automation-templates
+```
 
-2. **Import workflows to n8n:**
-   - Copy the JSON files from the workflows directory
-   - Import them into your n8n instance
-   - Configure credentials and API keys
+✅ **Step 2: Choose your automation tool**
+- **n8n**: Self-hosted, complex workflows (9 workflows available)
+- **Zapier**: Quick integrations, no-code (coming soon)
+- **Make.com**: Visual workflows, data processing (coming soon)
+- **Power Automate**: Microsoft ecosystem (coming soon)
 
-3. **Configure credentials:**
-   - OpenAI API key for AI features
-   - Gmail credentials for email automation
-   - Google Sheets credentials for data logging
-   - Airtable credentials for database operations
+✅ **Step 3: Import workflows**
+- Copy workflow files from the tool directory
+- Import into your chosen automation platform
+- Follow tool-specific setup guides
+
+✅ **Step 4: Configure credentials**
+- OpenAI API key for AI features
+- Platform-specific credentials (Gmail, Airtable, etc.)
+- Test connections and permissions
+
+✅ **Step 5: Test and customize**
+- Follow individual workflow setup guides
+- Test with sample data
+- Customize for your specific use case
 
 ## 🔧 Prerequisites
 
-- n8n instance (self-hosted or cloud)
-- OpenAI API key
+### **Common Requirements**
+- OpenAI API key (for AI-powered features)
+- Internet connection for API integrations
+
+### **Tool-Specific Requirements**
+- **n8n**: Self-hosted instance or n8n Cloud account
+- **Zapier**: Zapier account (free or paid)
+- **Make.com**: Make.com account (free or paid)
+- **Power Automate**: Microsoft 365 or Azure account
+
+### **Service Integrations**
 - Gmail account with API access
 - Google Sheets API access
 - Airtable account (for applicable workflows)
+- Other service-specific credentials as needed
 
 ## 📊 Use Cases
 
@@ -159,6 +208,17 @@ This project is open source and available under the [MIT License](LICENSE).
 - [n8n Documentation](https://docs.n8n.io/)
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 - [n8n Community](https://community.n8n.io/)
+
+> ⭐ **If you find these automation templates useful, consider starring this repo to support the project!**
+
+## 🤝 Work With Me
+
+I'm passionate about creating innovative AI automation solutions and would love to collaborate on exciting projects! Whether you need custom n8n workflows, AI integrations, or automation consulting, let's build something amazing together.
+
+**Connect with me:**
+- 🎓 [Skool Community](https://skool.com/your-profile) - Join my learning community
+- 💼 [Freelance Profile](https://your-freelance-platform.com/profile) - Hire me for automation projects
+- 🌐 [Personal Website](https://your-website.com) - Learn more about my work and services
 
 ## 📧 Contact
 
