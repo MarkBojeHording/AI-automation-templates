@@ -1,4 +1,4 @@
-<!-- Banner Image Placeholder -->
+o<!-- Banner Image Placeholder -->
 <div align="center">
   <img src="https://via.placeholder.com/1200x400/1a1a1a/ffffff?text=n8n+AI+Automation+Templates" alt="n8n AI Automation Templates Banner" width="100%">
 </div>
@@ -29,17 +29,25 @@
 <details>
 <summary>Click to expand</summary>
 
-- [🚀 Featured Workflows](#-featured-workflows)
-- [🛠️ Technology Stack](#️-technology-stack)
-- [📁 Repository Structure](#-repository-structure)
-- [🚀 Getting Started](#-getting-started)
-- [🔧 Prerequisites](#-prerequisites)
-- [📊 Use Cases](#-use-cases)
-- [🤝 Contributing](#-contributing)
-- [📝 License](#-license)
-- [🔗 Links](#-links)
-- [🤝 Work With Me](#-work-with-me)
-- [📧 Contact](#-contact)
+- [AI Automation Templates Portfolio](#ai-automation-templates-portfolio)
+  - [🛠️ Supported Automation Tools](#️-supported-automation-tools)
+  - [🚀 Featured Workflows (n8n)](#-featured-workflows-n8n)
+  - [🛠️ Technology Stack](#️-technology-stack)
+  - [📁 Repository Structure](#-repository-structure)
+  - [🚀 Getting Started](#-getting-started)
+  - [🔧 Prerequisites](#-prerequisites)
+    - [**Common Requirements**](#common-requirements)
+    - [**Tool-Specific Requirements**](#tool-specific-requirements)
+    - [**Service Integrations**](#service-integrations)
+  - [📊 Use Cases](#-use-cases)
+    - [Business Automation](#business-automation)
+    - [Travel \& Hospitality](#travel--hospitality)
+    - [Content Creation](#content-creation)
+  - [🤝 Contributing](#-contributing)
+  - [📝 License](#-license)
+  - [🔗 Links](#-links)
+  - [🤝 Work With Me](#-work-with-me)
+  - [📧 Contact](#-contact)
 
 </details>
 
@@ -55,7 +63,7 @@ A comprehensive collection of AI-powered automation workflows across multiple pl
 |------|----------|------------|------------|-----------|---------------|
 | **n8n** | Self-hosted, complex workflows | ⭐⭐⭐ Advanced | ~30 min | 9 workflows | [📖 n8n Docs](n8n/README.md) |
 | **Zapier** | Quick integrations, no-code | ⭐ Easy | ~10 min | Coming soon | [📖 Zapier Docs](zapier/README.md) |
-| **Make.com** | Visual workflows, data processing | ⭐⭐ Intermediate | ~20 min | Coming soon | [📖 Make Docs](make-com/README.md) |
+| **Make.com** | Visual workflows, data processing | ⭐⭐ Intermediate | ~20 min | 3 scenarios | [📖 Make Docs](make-com/README.md) |
 | **Power Automate** | Microsoft ecosystem | ⭐⭐ Intermediate | ~15 min | Coming soon | [📖 Power Automate Docs](power-automate/README.md) |
 
 ## 🚀 Featured Workflows (n8n)
@@ -71,6 +79,14 @@ A comprehensive collection of AI-powered automation workflows across multiple pl
 | **AI Diagram Generator** | 📝 Content | Automated diagram creation from text descriptions | ![Example Output](./documentation/examples/ai-diagram-generator.png) | ⭐ Easy | ~10 min | [📖 Read Docs](n8n/content-automation/ai-diagram-generator/README.md) |
 | **AI Helpdesk** | 🎧 Support | AI-powered customer support automation system | ![Example Output](./documentation/examples/ai-helpdesk.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/support-automation/ai-helpdesk/README.md) |
 | **AI Support** | 🎧 Support | General AI support workflow for various use cases | ![Example Output](./documentation/examples/ai-support.png) | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/support-automation/ai-support/README.md) |
+
+## 🚀 Featured Scenarios (Make.com)
+
+| Scenario Name | Category | Short Description | 📸 Example Output | Difficulty | Setup Time | Documentation |
+|---------------|----------|-------------------|-------------------|------------|------------|---------------|
+| **AI-Powered Client Onboarding** | 💼 Business | Intelligent client onboarding with AI analysis and automated communications | ![Example Output](./documentation/examples/ai-client-onboarding.png) | ⭐⭐⭐ Advanced | ~45 min | [📖 Read Docs](make-com/business-automation/AI-Powered%20Client%20Onboarding%20Automation%20System/README.md) |
+| **AI Content Repurposing Engine** | 📝 Content | Multi-platform content repurposing with AI adaptation and automated distribution | ![Example Output](./documentation/examples/ai-content-repurposing.png) | ⭐⭐⭐ Advanced | ~40 min | [📖 Read Docs](make-com/content-automation/AI%20Content%20Repurposing%20Engine/README.md) |
+| **AI Customer Support Chatbot** | 🎧 Support | Intelligent chatbot with ticket management and automated escalation | ![Example Output](./documentation/examples/ai-support-chatbot.png) | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](make-com/support-automation/AI%20Customer%20Support%20Chatbot%20with%20Ticket%20Management/README.md) |
 
 ---
 
@@ -138,8 +154,8 @@ cd AI-automation-templates
 
 ✅ **Step 2: Choose your automation tool**
 - **n8n**: Self-hosted, complex workflows (9 workflows available)
+- **Make.com**: Visual workflows, data processing (3 scenarios available)
 - **Zapier**: Quick integrations, no-code (coming soon)
-- **Make.com**: Visual workflows, data processing (coming soon)
 - **Power Automate**: Microsoft ecosystem (coming soon)
 
 ✅ **Step 3: Import workflows**

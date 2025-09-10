@@ -2,14 +2,19 @@
 
 Visual workflow automation with powerful data transformation and webhook capabilities.
 
+## 🚀 Featured Scenarios
+
+| Scenario Name | Category | Short Description | 📸 Example Output | Difficulty | Setup Time | Documentation |
+|---------------|----------|-------------------|-------------------|------------|------------|---------------|
+| **AI-Powered Client Onboarding** | 💼 Business | Intelligent client onboarding with AI analysis and automated communications | ![Example Output](../documentation/examples/ai-client-onboarding.png) | ⭐⭐⭐ Advanced | ~45 min | [📖 Read Docs](business-automation/AI-Powered%20Client%20Onboarding%20Automation%20System/README.md) |
+| **AI Content Repurposing Engine** | 📝 Content | Multi-platform content repurposing with AI adaptation and automated distribution | ![Example Output](../documentation/examples/ai-content-repurposing.png) | ⭐⭐⭐ Advanced | ~40 min | [📖 Read Docs](content-automation/AI%20Content%20Repurposing%20Engine/README.md) |
+| **AI Customer Support Chatbot** | 🎧 Support | Intelligent chatbot with ticket management and automated escalation | ![Example Output](../documentation/examples/ai-support-chatbot.png) | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](support-automation/AI%20Customer%20Support%20Chatbot%20with%20Ticket%20Management/README.md) |
+
 ## 🚀 Coming Soon
 
-Make.com scenarios are currently in development. Check back soon for:
+Additional Make.com scenarios in development:
 
-- **Business Automation**: Data processing, CRM synchronization, reporting automation
 - **Travel Automation**: Multi-source data aggregation, booking optimization, travel analytics
-- **Content Automation**: Content pipeline automation, multi-platform publishing, SEO workflows
-- **Support Automation**: Advanced ticket routing, customer journey automation, analytics
 
 ## 🛠️ Make.com Advantages
 
