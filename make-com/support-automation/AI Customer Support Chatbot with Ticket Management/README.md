@@ -107,7 +107,7 @@ ZENDESK_API_KEY=your_zendesk_api_key
 ZENDESK_DOMAIN=your_zendesk_domain
 KNOWLEDGE_BASE_API=your_kb_api_key
 EMAIL_SERVICE_CREDENTIALS=your_email_credentials
-SLACK_WEBHOOK_URL=your_slack_webhook
+SLACK_WEBHOOK_URL=your_slack_webhook_url
 ```
 
 ## 📖 Usage Examples
@@ -203,11 +203,11 @@ SLACK_WEBHOOK_URL=your_slack_webhook
 
 - **Execution Time**: 2-5 seconds per query
 - **Resource Usage**: Moderate (API calls to OpenAI and support systems)
-- **API Limits**: 
+- **API Limits**:
   - OpenAI: Rate limits apply
   - Support Systems: Platform-specific limits
   - Webhooks: Depends on hosting
-- **Cost Factors**: 
+- **Cost Factors**:
   - OpenAI: ~$0.01 per query
   - Support System APIs: Usually included in plan
   - Make.com: Scenario execution credits

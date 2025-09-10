@@ -172,11 +172,11 @@ CRM_API_KEY=your_crm_api_key
 
 - **Execution Time**: 2-5 minutes per client onboarding
 - **Resource Usage**: Moderate (API calls to multiple services)
-- **API Limits**: 
+- **API Limits**:
   - OpenAI: Rate limits apply
   - Airtable: 5 requests per second
   - Email/SMS: Service-specific limits
-- **Cost Factors**: 
+- **Cost Factors**:
   - OpenAI: ~$0.02 per client analysis
   - SMS: ~$0.01 per message
   - Make.com: Scenario execution credits

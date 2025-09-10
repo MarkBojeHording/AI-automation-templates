@@ -1,4 +1,4 @@
-o<!-- Banner Image Placeholder -->
+ot<!-- Banner Image Placeholder -->
 <div align="center">
   <img src="https://via.placeholder.com/1200x400/1a1a1a/ffffff?text=n8n+AI+Automation+Templates" alt="n8n AI Automation Templates Banner" width="100%">
 </div>
@@ -32,6 +32,7 @@ o<!-- Banner Image Placeholder -->
 - [AI Automation Templates Portfolio](#ai-automation-templates-portfolio)
   - [🛠️ Supported Automation Tools](#️-supported-automation-tools)
   - [🚀 Featured Workflows (n8n)](#-featured-workflows-n8n)
+  - [� Featured Scenarios (Make.com)](#-featured-scenarios-makecom)
   - [🛠️ Technology Stack](#️-technology-stack)
   - [📁 Repository Structure](#-repository-structure)
   - [🚀 Getting Started](#-getting-started)

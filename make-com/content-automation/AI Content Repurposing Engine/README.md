@@ -177,11 +177,11 @@ MAILCHIMP_API_KEY=your_mailchimp_api_key
 
 - **Execution Time**: 3-8 minutes per content piece
 - **Resource Usage**: High (multiple API calls)
-- **API Limits**: 
+- **API Limits**:
   - OpenAI: Rate limits apply
   - Social Media: Platform-specific limits
   - Dropbox: 600 requests per hour
-- **Cost Factors**: 
+- **Cost Factors**:
   - OpenAI: ~$0.05 per content piece
   - Social Media APIs: Usually free
   - Make.com: Scenario execution credits

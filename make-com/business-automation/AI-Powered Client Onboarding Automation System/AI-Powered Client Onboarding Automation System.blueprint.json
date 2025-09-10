@@ -1300,7 +1300,7 @@
             "mapper": {
                 "ca": "",
                 "qs": [],
-                "url": "https://hooks.slack.com/services/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",
+                "url": "https://hooks.slack.com/services/YOUR_SLACK_WEBHOOK_URL",
                 "data": "{\n  \"text\": \"*New sales script ready!*\\nClient: {{11.`Client Name`}}\\nOffer: {{11.`Offer Name`}}\\nChallenge: {{11.`Key Challenge`}}\\nSales Script:\\n{{5.result}}{{5.choices[].text}}\\nGoogle Doc Link: {{6.webViewLink}}\"\n}",
                 "gzip": true,
                 "method": "post",
