@@ -66,23 +66,23 @@ A comprehensive collection of AI-powered automation workflows across multiple pl
 
 | Workflow Name | Category | Short Description | Setup Time | Documentation |
 |---------------|----------|-------------------|------------|---------------|
-| **Plumbing Voice Agent** | 💼 Business | AI-powered voice-to-invoice automation for plumbing businesses |   ~15 min | [📖 Read Docs](n8n/business-automation/plumbing-voice-agent/README.md) |
-| **AI Customer Support Agent** | 💼 Business | Intelligent email support automation with smart routing |   ~25 min | [📖 Read Docs](n8n/business-automation/ai-customer-support/README.md) |
-| **AI Travel Concierge** | ✈️ Travel | Automated travel planning and booking assistance |   ~30 min | [📖 Read Docs](n8n/travel-automation/ai-travel-concierge/README.md) |
-| **Travel Automation Workflow** | ✈️ Travel | Main travel automation workflow for comprehensive travel management |   ~35 min | [📖 Read Docs](n8n/travel-automation/travel-automation-workflow/README.md) |
-| **Travel Data Ingestion** | ✈️ Travel | Travel data processing pipeline for information collection |   ~20 min | [📖 Read Docs](n8n/travel-automation/travel-data-ingestion/README.md) |
-| **Travel Enrichment** | ✈️ Travel | Data enrichment and optimization for travel information |   ~20 min | [📖 Read Docs](n8n/travel-automation/travel-enrichment/README.md) |
-| **AI Diagram Generator** | 📝 Content | Automated diagram creation from text descriptions |   ~10 min | [📖 Read Docs](n8n/content-automation/ai-diagram-generator/README.md) |
-| **AI Helpdesk** | 🎧 Support | AI-powered customer support automation system |   ~20 min | [📖 Read Docs](n8n/support-automation/ai-helpdesk/README.md) |
-| **AI Support** | 🎧 Support | General AI support workflow for various use cases |   ~15 min | [📖 Read Docs](n8n/support-automation/ai-support/README.md) |
+| **Plumbing Voice Agent** | 💼 Business | AI-powered voice-to-invoice automation for plumbing businesses | ~15 min | [📖 Read Docs](n8n/business-automation/plumbing-voice-agent/README.md) |
+| **AI Customer Support Agent** | 💼 Business | Intelligent email support automation with smart routing | ~25 min | [📖 Read Docs](n8n/business-automation/ai-customer-support/README.md) |
+| **AI Travel Concierge** | ✈️ Travel | Automated travel planning and booking assistance | ~30 min | [📖 Read Docs](n8n/travel-automation/ai-travel-concierge/README.md) |
+| **Travel Automation Workflow** | ✈️ Travel | Main travel automation workflow for comprehensive travel management | ~35 min | [📖 Read Docs](n8n/travel-automation/travel-automation-workflow/README.md) |
+| **Travel Data Ingestion** | ✈️ Travel | Travel data processing pipeline for information collection | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-data-ingestion/README.md) |
+| **Travel Enrichment** | ✈️ Travel | Data enrichment and optimization for travel information | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-enrichment/README.md) |
+| **AI Diagram Generator** | 📝 Content | Automated diagram creation from text descriptions | ~10 min | [📖 Read Docs](n8n/content-automation/ai-diagram-generator/README.md) |
+| **AI Helpdesk** | 🎧 Support | AI-powered customer support automation system | ~20 min | [📖 Read Docs](n8n/support-automation/ai-helpdesk/README.md) |
+| **AI Support** | 🎧 Support | General AI support workflow for various use cases | ~15 min | [📖 Read Docs](n8n/support-automation/ai-support/README.md) |
 
 ## 🚀 Featured Scenarios (Make.com)
 
-| Scenario Name | Category | Short Description | Difficulty | Setup Time | Documentation |
+| Scenario Name | Category | Short Description | Setup Time | Documentation |
 |---------------|----------|-------------------|------------|---------------|
-| **AI-Powered Client Onboarding** | 💼 Business | Intelligent client onboarding with AI analysis and automated communications |   ~45 min | [📖 Read Docs](make-com/business-automation/AI-Powered%20Client%20Onboarding%20Automation%20System/README.md) |
-| **AI Content Repurposing Engine** | 📝 Content | Multi-platform content repurposing with AI adaptation and automated distribution |   ~40 min | [📖 Read Docs](make-com/content-automation/AI%20Content%20Repurposing%20Engine/README.md) |
-| **AI Customer Support Chatbot** | 🎧 Support | Intelligent chatbot with ticket management and automated escalation |   ~35 min | [📖 Read Docs](make-com/support-automation/AI%20Customer%20Support%20Chatbot%20with%20Ticket%20Management/README.md) |
+| **AI-Powered Client Onboarding** | 💼 Business | Intelligent client onboarding with AI analysis and automated communications | ~45 min | [📖 Read Docs](make-com/business-automation/AI-Powered%20Client%20Onboarding%20Automation%20System/README.md) |
+| **AI Content Repurposing Engine** | 📝 Content | Multi-platform content repurposing with AI adaptation and automated distribution | ~40 min | [📖 Read Docs](make-com/content-automation/AI%20Content%20Repurposing%20Engine/README.md) |
+| **AI Customer Support Chatbot** | 🎧 Support | Intelligent chatbot with ticket management and automated escalation | ~35 min | [📖 Read Docs](make-com/support-automation/AI%20Customer%20Support%20Chatbot%20with%20Ticket%20Management/README.md) |
 
 ---
 
