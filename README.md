@@ -1,8 +1,3 @@
-ot<!-- Banner Image Placeholder -->
-<div align="center">
-  <img src="https://via.placeholder.com/1200x400/1a1a1a/ffffff?text=n8n+AI+Automation+Templates" alt="n8n AI Automation Templates Banner" width="100%">
-</div>
-
 <!-- GitHub Badges -->
 <div align="center">
   <a href="https://github.com/MarkBojeHording/n8n-automation-templates/stargazers">
@@ -32,7 +27,7 @@ ot<!-- Banner Image Placeholder -->
 - [AI Automation Templates Portfolio](#ai-automation-templates-portfolio)
   - [🛠️ Supported Automation Tools](#️-supported-automation-tools)
   - [🚀 Featured Workflows (n8n)](#-featured-workflows-n8n)
-  - [� Featured Scenarios (Make.com)](#-featured-scenarios-makecom)
+  - [🚀 Featured Scenarios (Make.com)](#-featured-scenarios-makecom)
   - [🛠️ Technology Stack](#️-technology-stack)
   - [📁 Repository Structure](#-repository-structure)
   - [🚀 Getting Started](#-getting-started)
@@ -69,25 +64,25 @@ A comprehensive collection of AI-powered automation workflows across multiple pl
 
 ## 🚀 Featured Workflows (n8n)
 
-| Workflow Name | Category | Short Description | 📸 Example Output | Difficulty | Setup Time | Documentation |
-|---------------|----------|-------------------|-------------------|------------|------------|---------------|
-| **Plumbing Voice Agent** | 💼 Business | AI-powered voice-to-invoice automation for plumbing businesses | ![Example Output](./documentation/examples/plumbing-voice-agent.png) | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/business-automation/plumbing-voice-agent/README.md) |
-| **AI Customer Support Agent** | 💼 Business | Intelligent email support automation with smart routing | ![Example Output](./documentation/examples/ai-customer-support.png) | ⭐⭐⭐ Advanced | ~25 min | [📖 Read Docs](n8n/business-automation/ai-customer-support/README.md) |
-| **AI Travel Concierge** | ✈️ Travel | Automated travel planning and booking assistance | ![Example Output](./documentation/examples/ai-travel-concierge.png) | ⭐⭐⭐ Advanced | ~30 min | [📖 Read Docs](n8n/travel-automation/ai-travel-concierge/README.md) |
-| **Travel Automation Workflow** | ✈️ Travel | Main travel automation workflow for comprehensive travel management | ![Example Output](./documentation/examples/travel-automation-workflow.png) | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](n8n/travel-automation/travel-automation-workflow/README.md) |
-| **Travel Data Ingestion** | ✈️ Travel | Travel data processing pipeline for information collection | ![Example Output](./documentation/examples/travel-data-ingestion.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-data-ingestion/README.md) |
-| **Travel Enrichment** | ✈️ Travel | Data enrichment and optimization for travel information | ![Example Output](./documentation/examples/travel-enrichment.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-enrichment/README.md) |
-| **AI Diagram Generator** | 📝 Content | Automated diagram creation from text descriptions | ![Example Output](./documentation/examples/ai-diagram-generator.png) | ⭐ Easy | ~10 min | [📖 Read Docs](n8n/content-automation/ai-diagram-generator/README.md) |
-| **AI Helpdesk** | 🎧 Support | AI-powered customer support automation system | ![Example Output](./documentation/examples/ai-helpdesk.png) | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/support-automation/ai-helpdesk/README.md) |
-| **AI Support** | 🎧 Support | General AI support workflow for various use cases | ![Example Output](./documentation/examples/ai-support.png) | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/support-automation/ai-support/README.md) |
+| Workflow Name | Category | Short Description | Difficulty | Setup Time | Documentation |
+|---------------|----------|-------------------|------------|------------|---------------|
+| **Plumbing Voice Agent** | 💼 Business | AI-powered voice-to-invoice automation for plumbing businesses |  | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/business-automation/plumbing-voice-agent/README.md) |
+| **AI Customer Support Agent** | 💼 Business | Intelligent email support automation with smart routing |  | ⭐⭐⭐ Advanced | ~25 min | [📖 Read Docs](n8n/business-automation/ai-customer-support/README.md) |
+| **AI Travel Concierge** | ✈️ Travel | Automated travel planning and booking assistance |  | ⭐⭐⭐ Advanced | ~30 min | [📖 Read Docs](n8n/travel-automation/ai-travel-concierge/README.md) |
+| **Travel Automation Workflow** | ✈️ Travel | Main travel automation workflow for comprehensive travel management |  | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](n8n/travel-automation/travel-automation-workflow/README.md) |
+| **Travel Data Ingestion** | ✈️ Travel | Travel data processing pipeline for information collection |  | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-data-ingestion/README.md) |
+| **Travel Enrichment** | ✈️ Travel | Data enrichment and optimization for travel information |  | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/travel-automation/travel-enrichment/README.md) |
+| **AI Diagram Generator** | 📝 Content | Automated diagram creation from text descriptions |  | ⭐ Easy | ~10 min | [📖 Read Docs](n8n/content-automation/ai-diagram-generator/README.md) |
+| **AI Helpdesk** | 🎧 Support | AI-powered customer support automation system |  | ⭐⭐ Intermediate | ~20 min | [📖 Read Docs](n8n/support-automation/ai-helpdesk/README.md) |
+| **AI Support** | 🎧 Support | General AI support workflow for various use cases |  | ⭐⭐ Intermediate | ~15 min | [📖 Read Docs](n8n/support-automation/ai-support/README.md) |
 
 ## 🚀 Featured Scenarios (Make.com)
 
-| Scenario Name | Category | Short Description | 📸 Example Output | Difficulty | Setup Time | Documentation |
-|---------------|----------|-------------------|-------------------|------------|------------|---------------|
-| **AI-Powered Client Onboarding** | 💼 Business | Intelligent client onboarding with AI analysis and automated communications | ![Example Output](./documentation/examples/ai-client-onboarding.png) | ⭐⭐⭐ Advanced | ~45 min | [📖 Read Docs](make-com/business-automation/AI-Powered%20Client%20Onboarding%20Automation%20System/README.md) |
-| **AI Content Repurposing Engine** | 📝 Content | Multi-platform content repurposing with AI adaptation and automated distribution | ![Example Output](./documentation/examples/ai-content-repurposing.png) | ⭐⭐⭐ Advanced | ~40 min | [📖 Read Docs](make-com/content-automation/AI%20Content%20Repurposing%20Engine/README.md) |
-| **AI Customer Support Chatbot** | 🎧 Support | Intelligent chatbot with ticket management and automated escalation | ![Example Output](./documentation/examples/ai-support-chatbot.png) | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](make-com/support-automation/AI%20Customer%20Support%20Chatbot%20with%20Ticket%20Management/README.md) |
+| Scenario Name | Category | Short Description | Difficulty | Setup Time | Documentation |
+|---------------|----------|-------------------|------------|------------|---------------|
+| **AI-Powered Client Onboarding** | 💼 Business | Intelligent client onboarding with AI analysis and automated communications |  | ⭐⭐⭐ Advanced | ~45 min | [📖 Read Docs](make-com/business-automation/AI-Powered%20Client%20Onboarding%20Automation%20System/README.md) |
+| **AI Content Repurposing Engine** | 📝 Content | Multi-platform content repurposing with AI adaptation and automated distribution |  | ⭐⭐⭐ Advanced | ~40 min | [📖 Read Docs](make-com/content-automation/AI%20Content%20Repurposing%20Engine/README.md) |
+| **AI Customer Support Chatbot** | 🎧 Support | Intelligent chatbot with ticket management and automated escalation |  | ⭐⭐⭐ Advanced | ~35 min | [📖 Read Docs](make-com/support-automation/AI%20Customer%20Support%20Chatbot%20with%20Ticket%20Management/README.md) |
 
 ---
 
@@ -233,9 +228,8 @@ This project is open source and available under the [MIT License](LICENSE).
 I'm passionate about creating innovative AI automation solutions and would love to collaborate on exciting projects! Whether you need custom n8n workflows, AI integrations, or automation consulting, let's build something amazing together.
 
 **Connect with me:**
-- 🎓 [Skool Community](https://skool.com/your-profile) - Join my learning community
-- 💼 [Freelance Profile](https://your-freelance-platform.com/profile) - Hire me for automation projects
-- 🌐 [Personal Website](https://your-website.com) - Learn more about my work and services
+- 💼 [Freelance Profile](https://www.upwork.com/freelancers/~0111ffb9c44a84aa8b?viewMode=1) - Hire me for automation projects
+- 🌐 [Personal Website](https://buildaifor.me) - Learn more about my work and services
 
 ## 📧 Contact
 
