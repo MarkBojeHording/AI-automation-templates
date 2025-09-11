@@ -1,0 +1,740 @@
+{
+  "name": "Invoice Processor",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-tesseractjs.tesseractNode",
+      "typeVersion": 1,
+      "position": [
+        -992,
+        112
+      ],
+      "id": "036db459-0ab3-4013-a9a4-b22137bd622c",
+      "name": "Tesseract"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1X7YF9WpyyqgZtzkYd5WW3iJbqbsIvCjj",
+          "mode": "list",
+          "cachedResultName": "New Invoice Folder",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1X7YF9WpyyqgZtzkYd5WW3iJbqbsIvCjj"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1728,
+        -240
+      ],
+      "id": "878ecc88-689f-48cb-ae21-5391f71308cc",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "pIsidBZjmBKZxNdt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## New Invoice Received\n### This is the starting point of the workflow. When a new invoice PDF is uploaded to the designated folder in Google Drive, the workflow triggers automatically. This ensures all incoming invoices are captured in real-time.\n",
+        "height": 144,
+        "width": 624,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1744,
+        -432
+      ],
+      "id": "b3541552-7d4b-4ab1-bbdd-47097eebb4d8",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Extract Text from the Invoice\n### This step uses OCR or text extraction to read the content of the invoice PDF. All relevant information such as vendor, invoice number, date, and total amount is extracted as raw text for further processing.\n",
+        "height": 144,
+        "width": 816,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1056,
+        -432
+      ],
+      "id": "f20bc540-7e4a-4845-8c0d-785a8504e36a",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "41e5981e-6117-4ed3-a810-ad12a095b222",
+              "leftValue": "={{ $json[\"mimeType\"] }}",
+              "rightValue": "application/pdf",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1344,
+        -240
+      ],
+      "id": "3231cdb9-8da1-4158-900d-b47746ee28d8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -1024,
+        -240
+      ],
+      "id": "46320ade-b4c2-4b62-abc9-ea7a3e2ba67a",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const text = item.json.text || \"\";\n  if (text.trim().length < 50) {\n    // Not enough text → needs OCR\n    return {\n      json: {\n        needsOCR: true,\n        fileId: item.json.id,\n        rawText: text\n      }\n    };\n  }\n  // Sufficient text → continue\n  return {\n    json: {\n      rawText: text,\n      needsOCR: false\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -864,
+        -240
+      ],
+      "id": "ea916dbd-2449-47ad-bfb8-acf16ae4bf15",
+      "name": "Text Length"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0732c605-7b89-46e7-8f71-cc33b074a1ca",
+              "leftValue": "{{$json[\"needsOCR\"]}}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -704,
+        -240
+      ],
+      "id": "d76c791d-b0cb-413a-b0b6-da1c12ee4c58",
+      "name": "needsOCR"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4c5900be-04af-4647-a48b-da8b1da3b958",
+              "name": "rawText",
+              "value": "={{ $json[\"rawText\"].replace(/\\s+/g, ' ').trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -800,
+        112
+      ],
+      "id": "c9b56e77-24b3-47a7-9e93-91d8a7f240b4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  let text = item.json.rawText || \"\";\n  text = text.replace(/\\s+/g, \" \").trim();\n  return {json: {rawText: text}};\n});return $input.all().map(item => {\n  let text = item.json.rawText || \"\";\n  text = text.replace(/\\s+/g, \" \").trim();\n  return {json: {rawText: text}};\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -448,
+        48
+      ],
+      "id": "22e76e69-42a6-462b-8f3e-72e99be24907",
+      "name": "Normalize Text"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "205cbd98-39fb-4653-b954-8897368e21a3",
+              "leftValue": "={{ $json[\"invoiceNumber\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "99dd42c6-440a-44db-98e9-605e5cae7bbc",
+              "leftValue": "={ $json[\"total\"].toString() }}",
+              "rightValue": "null",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        -224
+      ],
+      "id": "fe12881e-eb63-4b18-a218-2d78d33943b1",
+      "name": "If Valid?"
+    },
+    {
+      "parameters": {
+        "content": "## Normalize & Structure Data\n### The extracted raw text is parsed and structured into a standardized JSON format. This ensures that key fields like vendor, invoice number, date, and total are consistently available for downstream nodes, avoiding blank or misread values.\n",
+        "height": 144,
+        "width": 640,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        -432
+      ],
+      "id": "2fa4bd47-1fdd-4093-ab80-c81dab7a693f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appV36pVeENuE7KnT",
+          "mode": "list",
+          "cachedResultName": "Invoices",
+          "cachedResultUrl": "https://airtable.com/appV36pVeENuE7KnT"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl4sF7nbVlK3gzEU",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appV36pVeENuE7KnT/tbl4sF7nbVlK3gzEU"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "invoiceNumber": "={{ $json[\"invoiceNumber\"] }}",
+            "date": "={{ $json[\"date\"] }}",
+            "Total": "={{ $json[\"total\"] }}",
+            "Vendor": "={{ $json[\"vendor\"] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "invoiceNumber",
+              "displayName": "invoiceNumber",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Vendor",
+              "displayName": "Vendor",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "File Link",
+              "displayName": "File Link",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "typecast": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        288,
+        -240
+      ],
+      "id": "b9fe6fa9-07b3-40b2-ac2a-f479e7fd8b5d",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "CJ3p4LvWdVT1BBIK",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Google Drive Trigger').first(0).json.id }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1j9vgHzKbMjzE0_Ax15n9kqE2cZkIte6Q",
+          "mode": "list",
+          "cachedResultName": "Processed Invoices",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1j9vgHzKbMjzE0_Ax15n9kqE2cZkIte6Q"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        992,
+        -224
+      ],
+      "id": "d807230a-e03b-4b59-83ae-b0f8a0f558d9",
+      "name": "Move file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "pIsidBZjmBKZxNdt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Process File and Notify Team\n### Structured invoice data is sent to Gmail for team notification and optionally recorded in Airtable for tracking. The email contains a clear HTML summary of the invoice, ensuring everyone has the necessary information in an easy-to-read format.\n",
+        "width": 640
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        544,
+        -432
+      ],
+      "id": "4bd2bb7e-29c2-4e0c-9768-ed2f34fbe5d6",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "sendTo": "markhording@gmail.com",
+        "subject": "= {{ $json.vendor }} Invoice Received: {{ $json.invoiceNumber }}\n\n",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      background-color: #f5f5f5;\n      margin: 0;\n      padding: 20px;\n    }\n    .container {\n      max-width: 600px;\n      margin: auto;\n      background-color: #ffffff;\n      padding: 20px;\n      border-radius: 10px;\n      box-shadow: 0 0 10px rgba(0,0,0,0.1);\n    }\n    h2 {\n      color: #333333;\n      font-size: 20px;\n      margin-bottom: 10px;\n    }\n    p {\n      color: #555555;\n      font-size: 14px;\n      line-height: 1.5;\n    }\n    table {\n      width: 100%;\n      border-collapse: collapse;\n      margin-top: 15px;\n    }\n    th, td {\n      text-align: left;\n      padding: 10px;\n      border-bottom: 1px solid #dddddd;\n      font-size: 14px;\n    }\n    th {\n      background-color: #f0f0f0;\n      color: #333333;\n    }\n    .total {\n      font-weight: bold;\n      color: #007bff;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h2>Invoice Processed Successfully ✅</h2>\n    <p>An invoice has been successfully processed and added to your records.</p>\n\n    <table>\n      <tr>\n        <th>Vendor</th>\n        <td>{{ $json.vendor }}</td>\n      </tr>\n      <tr>\n        <th>Invoice Number</th>\n        <td>{{ $json.invoiceNumber }}</td>\n      </tr>\n      <tr>\n        <th>Date</th>\n        <td>{{ $json.date }}</td>\n      </tr>\n      <tr>\n        <th>Total</th>\n        <td class=\"total\">{{ $json.total }}</td>\n      </tr>\n    </table>\n  </div>\n</body>\n</html>\n\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        784,
+        -224
+      ],
+      "id": "b627f0e3-4684-4a67-aee7-f7d4e4f921f4",
+      "name": "Send a message",
+      "webhookId": "00782eea-92fa-404b-b79d-079cc5ce8bf5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "BQEYHU1Aybh6ykDl",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json[\"id\"] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -1536,
+        -240
+      ],
+      "id": "32493d1f-0d26-4007-b72d-89de26fd3760",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "pIsidBZjmBKZxNdt",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an expert at extracting key information from invoices. \nYour task is to extract the invoice number, date, total amount, and vendor name.\n\nThe invoice text may use different labels such as:\n- Invoice number: \"Invoice\", \"Invoice ID\", \"Ref\", \"Bill #\"\n- Date: \"Date\", \"Invoice Date\", \"Issued\"\n- Vendor: \"From\", \"Supplier\", \"Billed By\", \"Company\"\n- Total: \"Total\", \"Amount Due\", \"Balance\", \"Grand Total\"\n\nYour output must be a JSON object with the keys \"invoiceNumber\", \"date\", \"total\", and \"vendor\". \nThe \"date\" field must always be in YYYY-MM-DD format. \nThe \"total\" should be a number without any currency symbols. \nIf a piece of information is not found, use a value of null. \nDo not include any other text or explanation in your response.\n",
+              "role": "system"
+            },
+            {
+              "content": "=You are an expert at extracting key information from invoices.\n\nExtract the following fields from the text. \nIf a field is missing, return null. \nAlways return valid JSON in this schema only:\n\n{\n  \"invoiceNumber\": \"string or null\",\n  \"date\": \"YYYY-MM-DD or null\",\n  \"total\": \"number or null\",\n  \"vendor\": \"string or null\"\n}\n\nHere is the invoice text:\n{{ $json[\"rawText\"] }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -496,
+        -240
+      ],
+      "id": "e0354964-99f0-487e-aff7-8f15a436a5c5",
+      "name": "Message a model",
+      "alwaysOutputData": false,
+      "credentials": {
+        "openAiApi": {
+          "id": "5hXGlcMbU6Ps8uxE",
+          "name": "OpenAi account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  try {\n    const openAIOutput = JSON.parse(item.json.message.content);\n\n    // Ensure all fields exist, even if they are null\n    const invoiceNumber = openAIOutput.invoiceNumber || null;\n    const date = openAIOutput.date || null;\n    const total = openAIOutput.total || null;\n    const vendor = openAIOutput.vendor || null;\n\n    // Correctly format the date\n    let formattedDate = null;\n    if (date) {\n      formattedDate = DateTime.fromFormat(date, \"yyyy-MM-dd\").toFormat(\"yyyy-MM-dd\");\n    }\n\n    // Clean and format the total field\n    let formattedTotal = null;\n    if (total) {\n      formattedTotal = parseFloat(String(total).replace(/[^\\d.]/g, \"\"));\n    }\n\n    return {\n      json: {\n        invoiceNumber: invoiceNumber,\n        date: formattedDate,\n        total: formattedTotal,\n        vendor: vendor,\n      },\n    };\n  } catch (error) {\n    // Return original data and log the error to help with debugging\n    return {\n      json: {\n        error: \"JSON Parsing Failed\",\n        originalData: item.json,\n      },\n    };\n  }\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -112,
+        -224
+      ],
+      "id": "216c9750-1b0f-456c-9ef9-af3ae261516e",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    vendor: $json[\"fields\"]?.[\"Vendor\"] || $json[\"vendor\"] || null,\n    invoiceNumber: $json[\"fields\"]?.[\"invoiceNumber\"] || $json[\"invoiceNumber\"] || null,\n    date: $json[\"fields\"]?.[\"date\"] || $json[\"date\"] || null,\n    total: $json[\"fields\"]?.[\"Total\"] || $json[\"total\"] || null\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        576,
+        -224
+      ],
+      "id": "b6437774-b6c2-4ab8-a32b-f2ea0fd41591",
+      "name": "Code1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tesseract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tesseract": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Text Length",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Length": {
+      "main": [
+        [
+          {
+            "node": "needsOCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "needsOCR": {
+      "main": [
+        [
+          {
+            "node": "Tesseract",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Normalize Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Normalize Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Text": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Valid?": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move file": {
+      "main": [
+        []
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "If Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Move file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "56db93f8-47d4-4b2b-b3f9-79dbfeeb3b5a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b02c6d6bdac1715a7427651b479af9449541e602e88ea383a2ea76ff3273088f"
+  },
+  "id": "UNM0BQH78Cu61QKu",
+  "tags": []
+}

@@ -55,18 +55,19 @@ A comprehensive collection of AI-powered automation workflows across multiple pl
 
 ## 🛠️ Supported Automation Tools
 
-| Tool | Best For | Difficulty | Setup Time | Workflows | Documentation |
-|------|----------|------------|------------|-----------|---------------|
-| **n8n** | Self-hosted, complex workflows  ~30 min | 9 workflows | [📖 n8n Docs](n8n/README.md) |
-| **Zapier** | Quick integrations, no-code  ~10 min | Coming soon | [📖 Zapier Docs](zapier/README.md) |
-| **Make.com** | Visual workflows, data processing  ~20 min | 3 scenarios | [📖 Make Docs](make-com/README.md) |
-| **Power Automate** | Microsoft ecosystem  ~15 min | Coming soon | [📖 Power Automate Docs](power-automate/README.md) |
+| Tool | Best For | Setup Time | Workflows | Documentation |
+|------|----------|------------|-----------|---------------|
+| **n8n** | Self-hosted, complex workflows | ~30 min | 10 workflows | [📖 n8n Docs](n8n/README.md) |
+| **Zapier** | Quick integrations, no-code | ~10 min | Coming soon | [📖 Zapier Docs](zapier/README.md) |
+| **Make.com** | Visual workflows, data processing | ~20 min | 3 scenarios | [📖 Make Docs](make-com/README.md) |
+| **Power Automate** | Microsoft ecosystem | ~15 min | Coming soon | [📖 Power Automate Docs](power-automate/README.md) |
 
 ## 🚀 Featured Workflows (n8n)
 
 | Workflow Name | Category | Short Description | Setup Time | Documentation |
 |---------------|----------|-------------------|------------|---------------|
 | **Plumbing Voice Agent** | 💼 Business | AI-powered voice-to-invoice automation for plumbing businesses | ~15 min | [📖 Read Docs](n8n/business-automation/plumbing-voice-agent/README.md) |
+| **Invoice Processor** | 💼 Business | Automated invoice processing with AI-powered data extraction and OCR | ~20 min | [📖 Read Docs](n8n/business-automation/invoice-processor/README.md) |
 | **AI Customer Support Agent** | 💼 Business | Intelligent email support automation with smart routing | ~25 min | [📖 Read Docs](n8n/business-automation/ai-customer-support/README.md) |
 | **AI Travel Concierge** | ✈️ Travel | Automated travel planning and booking assistance | ~30 min | [📖 Read Docs](n8n/travel-automation/ai-travel-concierge/README.md) |
 | **Travel Automation Workflow** | ✈️ Travel | Main travel automation workflow for comprehensive travel management | ~35 min | [📖 Read Docs](n8n/travel-automation/travel-automation-workflow/README.md) |
@@ -149,7 +150,7 @@ cd AI-automation-templates
 ```
 
 ✅ **Step 2: Choose your automation tool**
-- **n8n**: Self-hosted, complex workflows (9 workflows available)
+- **n8n**: Self-hosted, complex workflows (10 workflows available)
 - **Make.com**: Visual workflows, data processing (3 scenarios available)
 - **Zapier**: Quick integrations, no-code (coming soon)
 - **Power Automate**: Microsoft ecosystem (coming soon)
