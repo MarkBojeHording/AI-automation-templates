@@ -1,0 +1,192 @@
+{
+  "name": "Business Data Integration",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "documentURL": "1FBulxiwwdNCabLp_kV_hwVv0PZ9sbFFhiOL9LFt8-OE"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "94b7795e-c6b3-44cd-9415-28d405cbb785",
+      "name": "Get a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "ooorT7agfaOtnItj",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bad4899d-b209-424e-8029-5b05e8a9edf6",
+              "name": "client",
+              "value": "={{$json[\"text\"].split(\"\\n\")[0].replace(\"Client: \",\"\").trim()}}",
+              "type": "string"
+            },
+            {
+              "id": "9fbc7f78-8331-4269-99a1-1efbf573581b",
+              "name": "project",
+              "value": "={{$json[\"text\"].split(\"\\n\")[1].replace(\"Project: \",\"\").trim()}}",
+              "type": "string"
+            },
+            {
+              "id": "22f8d924-4882-4d2f-ac85-d5fbe52ccbb6",
+              "name": "deadline",
+              "value": "={{$json[\"text\"].split(\"\\n\")[2].replace(\"Deadline: \",\"\").trim()}}",
+              "type": "string"
+            },
+            {
+              "id": "8ba58cf6-8569-4c3c-b698-4e984801b374",
+              "name": "task",
+              "value": "={{$json[\"text\"].split(\"\\n\")[3].replace(\"Task: \",\"\").trim()}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        0
+      ],
+      "id": "8e35c9bb-9c72-4b18-89d2-2cc1f651be26",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "48aa1337-30e3-459c-bc0c-03c1a1e03ac3",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "value": "26c4cdda-02e6-807d-8520-d308e3ab8d00",
+          "mode": "list",
+          "cachedResultName": "Clients Task",
+          "cachedResultUrl": "https://www.notion.so/26c4cdda02e6807d8520d308e3ab8d00"
+        },
+        "title": "={{ $json.task }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Client|rich_text",
+              "textContent": "={{ $json.client }}"
+            },
+            {
+              "key": "Deadline|date",
+              "date": "={{ $json.deadline }}"
+            },
+            {
+              "key": "Project|multi_select",
+              "multiSelectValue": "={{ $json.project }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        0
+      ],
+      "id": "086c1a18-55cf-4f23-be79-54af017952b7",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "NMU8fIGhRJtEpP4e",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Split the document content by double line breaks (\\n\\n)\nconst blocks = $json.content.split(\"\\n\\n\").filter(b => b.trim() !== \"\");\n\nreturn blocks.map(block => ({\n  json: { text: block }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        384,
+        0
+      ],
+      "id": "0837ea0a-6d43-44b1-88df-3d1693b3c030",
+      "name": "Code"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get a document": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "35e5d48a-0039-4147-a844-a31f35d78a77",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b02c6d6bdac1715a7427651b479af9449541e602e88ea383a2ea76ff3273088f"
+  },
+  "id": "FYo1z4UjaJzkHrOa",
+  "tags": []
+}
